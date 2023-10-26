@@ -2,3 +2,5 @@ Colores
 CSS
 HTML
 AJAX
+
+// Este cambio se hizo desde la Web GIT
