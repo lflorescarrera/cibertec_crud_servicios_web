@@ -1,0 +1,66 @@
+﻿@model ProductListViewModel;
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>Listado Productos</h1>
+
+<button type="button" onclick="alert('Hola Mundo')">JAVASCRIPT</button>
+
+<dix class="row ml-5">
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.List)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>@item.Price</td>
+                        <td>@item.Stock</td>
+                        <td>
+                            <a class="btn btn-outline-warning" asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id"><i class="fa-sharp fa-regular fa-pen-to-square fa-beat fa-xs" style="color: #49511f;"></i></a>
+                            <a class="btn btn-outline-danger" onclick="DeleteProduct(@item.Id)"><i class="fa-sharp fa-solid fa-trash fa-beat fa-xs" style="color: #b83232;"></i><i class="fa-duotone fa-book-open"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</dix>
+
+<div class="row">
+    <div class="col-md-12">
+        <a class="btn btn-outline-success" asp-action="Add" asp-controller="Product">Añadir <i class="fa-solid fa-plus"></i></a>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+        function DeleteProduct(id) {
+            if (!confirm("¿Esta seguro que desea eliminar el registro?"))
+                return;
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("RemoveProduct","Product")' + '/' + id,
+                success: function (data) {
+                    alert(data);
+                },
+                Error: function () {
+                    alert("Algo salió mal")
+                }
+            });
+        }
+    </script>
+}
