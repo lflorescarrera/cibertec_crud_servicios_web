@@ -9,7 +9,7 @@
 
 <dix class="row ml-5">
     <div class="col-md-12">
-        <table class="table">
+        <table id="tbl" class="table">
             <thead>
                 <tr>
                     <th>Código</th>
@@ -28,8 +28,9 @@
                         <td>@item.Price</td>
                         <td>@item.Stock</td>
                         <td>
+                            <a class="btn btn-outline-info" onclick="ProductDetails(@item.Id)"><i class="fa-sharp fa-solid fa-info fa-beat fa-xs" style="color: dimgrey;"></i></a>
                             <a class="btn btn-outline-warning" asp-action="Edit" asp-controller="Product" asp-route-id="@item.Id"><i class="fa-sharp fa-regular fa-pen-to-square fa-beat fa-xs" style="color: #49511f;"></i></a>
-                            <a class="btn btn-outline-danger" onclick="DeleteProduct(@item.Id)"><i class="fa-sharp fa-solid fa-trash fa-beat fa-xs" style="color: #b83232;"></i><i class="fa-duotone fa-book-open"></i></a>
+                            <a class="btn btn-outline-danger" onclick="DeleteProduct(@item.Id)"><i class="fa-sharp fa-solid fa-trash fa-beat fa-xs" style="color: #b83232;"></i></a>
                         </td>
                     </tr>
                 }
@@ -46,10 +47,12 @@
 
 @section Scripts{
     <script type="text/javascript">
-        $(document).ready(function () {
 
+        $(document).ready(function () {
+            new DataTable('#tbl');
         });
-        function DeleteProduct(id) {
+
+        const DeleteProduct = (id) => {
             if (!confirm("¿Esta seguro que desea eliminar el registro?"))
                 return;
             $.ajax({
@@ -57,11 +60,27 @@
                 url: '@Url.Action("RemoveProduct","Product")' + '/' + id,
                 success: function (data) {
                     alert(data);
+                    window.location.href = window.location.href;
                 },
                 Error: function () {
                     alert("Algo salió mal")
                 }
             });
-        }
+        };
+
+        const ProductDetails = (id) => {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetProductDetail", "Product")' + '/' + id,
+                success: (data) => {
+                    // console.log(data);
+                    const msgProd = data.productName + "\n" + data.productPrice;
+                    alert(msgProd);
+                },
+                error: (data) => {
+                    alert('Error')
+                }
+            });
+        };
     </script>
 }

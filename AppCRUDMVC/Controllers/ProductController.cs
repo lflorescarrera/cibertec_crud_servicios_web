@@ -65,11 +65,11 @@ namespace AppCRUDMVC.Controllers
         public IActionResult EditSave(ProductViewModel model)
         {
             var findProd = _productContext.Products.SingleOrDefault(c => c.Id == model.Id);
-            if(findProd != null)
+            if (findProd != null)
             {
-                findProd.Name= model.Name;
-                findProd.Price= model.Price;
-                findProd.Stock= model.Stock;
+                findProd.Name = model.Name;
+                findProd.Price = model.Price;
+                findProd.Stock = model.Stock;
                 _productContext.SaveChanges();
             }
             return RedirectToAction("List", "Product");
@@ -82,6 +82,18 @@ namespace AppCRUDMVC.Controllers
             _productContext.Products.Remove(findProd);
             _productContext.SaveChanges();
             return Json("Se eliminó correctamente");
+        }
+
+        [HttpGet]
+        public JsonResult GetProductDetail(int id)
+        {
+            var product = _productContext.Products.Where(c => c.Id == id).SingleOrDefault();
+            return Json(new
+            {
+                ProductName = product.Name,
+                ProductPrice = product.Price,
+                ProductStock = product.Stock
+            });
         }
     }
 }
